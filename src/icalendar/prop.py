@@ -516,9 +516,7 @@ class vPeriod(object):
     def overlaps(self, other):
         if self.start > other.start:
             return other.overlaps(self)
-        if self.start <= other.start < self.end:
-            return True
-        return False
+        return self.start <= other.start < self.end
 
     def to_ical(self):
         if self.by_duration:
@@ -538,10 +536,7 @@ class vPeriod(object):
             raise ValueError('Expected period format, got: %s' % ical)
 
     def __repr__(self):
-        if self.by_duration:
-            p = (self.start, self.duration)
-        else:
-            p = (self.start, self.end)
+        p = (self.start, self.duration) if self.by_duration else (self.start, self.end)
         return 'vPeriod(%r)' % p
 
 
@@ -563,7 +558,7 @@ class vWeekday(compat.unicode_type):
         sign = match['signal']
         weekday = match['weekday']
         relative = match['relative']
-        if not weekday in vWeekday.week_days or sign not in '+-':
+        if weekday not in vWeekday.week_days or sign not in '+-':
             raise ValueError('Expected weekday abbrevation, got: %s' % self)
         self.relative = relative and int(relative) or None
         self.params = Parameters()
@@ -598,7 +593,7 @@ class vFrequency(compat.unicode_type):
     def __new__(cls, value, encoding=DEFAULT_ENCODING):
         value = to_unicode(value, encoding=encoding)
         self = super(vFrequency, cls).__new__(cls, value)
-        if not self in vFrequency.frequencies:
+        if self not in vFrequency.frequencies:
             raise ValueError('Expected frequency, got: %s' % self)
         self.params = Parameters()
         return self
@@ -1013,5 +1008,4 @@ class TypesFactory(CaselessDict):
         encoded string to a primitive python type.
         """
         type_class = self.for_property(name)
-        decoded = type_class.from_ical(value)
-        return decoded
+        return type_class.from_ical(value)

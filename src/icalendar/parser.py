@@ -233,13 +233,7 @@ class Parameters(CaselessDict):
                             vals.append(v.upper())
                         else:
                             vals.append(v)
-                if not vals:
-                    result[key] = val
-                else:
-                    if len(vals) == 1:
-                        result[key] = vals[0]
-                    else:
-                        result[key] = vals
+                result[key] = val if not vals else vals[0] if len(vals) == 1 else vals
             except ValueError as exc:
                 raise ValueError('%r is not a valid parameter string: %s'
                                  % (param, exc))

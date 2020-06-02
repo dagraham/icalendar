@@ -230,7 +230,7 @@ class Component(CaselessDict):
         of same. If name is passed, only components with name will be returned.
 
         """
-        if not name is None:
+        if name is not None:
             name = name.upper()
         return self._walk(name)
 

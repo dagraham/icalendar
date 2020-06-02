@@ -8,7 +8,7 @@ def canonsort_keys(keys, canonical_order=None):
     canonical_order will appear alphabetically at the end.
 
     """
-    canonical_map = dict((k, i) for i, k in enumerate(canonical_order or []))
+    canonical_map = {k: i for i, k in enumerate(canonical_order or [])}
     head = [k for k in keys if k in canonical_map]
     tail = [k for k in keys if k not in canonical_map]
     return sorted(head, key=lambda k: canonical_map[k]) + sorted(tail)
